@@ -5,8 +5,10 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings #Embeddings tran
 from langchain_core.documents import Document
 from langchain_community.vectorstores import FAISS
 import faiss
+import keySecure #importa o arquivo de chaves
 
-os.environ["GOOGLE_API_KEY"] = "AIzaSyB7zmDg0DqugkTqaxCszNd4XE3yuvltlt4"
+#Configuração da chave de API do Google a partir do arquivo keySecure.py
+key = keySecure.get_google_api_key(self=None)
 
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature = 0)
 
