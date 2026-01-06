@@ -4,20 +4,17 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_google_genai import GoogleGenerativeAIEmbeddings #Embeddings transformam dados complexos em vetores 
 from langchain_core.documents import Document
 import keySecure #importa o arquivo de chaves
+from langchain_community.vectorstores import FAISS #Facebook AI Similarity Search
+import faiss 
 
 #Configuração da chave de API do Google a partir do arquivo keySecure.py
 key = keySecure.get_google_api_key(self=None)
 
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature = 0)
+d = 768
+index_hns2 = faiss.IndexHNSWFlat(d, 32) #32 é o número de conexões por nó
 
- #exemplo de prompt tradicional sem RAG
+embeddings = GoogleGenerativeAIEmbeddings(model="models/embeddings-001")
 
-pergunta = "O que o TCU faz?"
+#faiss_db = FAISS.pasta(nome_documento, embeddings) 
 
-prompt_tradicional = ChatPromptTemplate.from_template(
-    "Responda a seguinte pergunta: {pergunta}"
-)
-
-chain_tradicional = prompt_tradicional | llm
-resposta_tradicional = chain_tradicional.invoke({"pergunta":pergunta})
-print(resposta_tradicional.content)
+#pinecone 
