@@ -1,12 +1,12 @@
 import os
-import keySecure #arquivo da chave
+from dotenv import load_dotenv
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain.schema import Document
 from langchain_community.vectorstores import FAISS 
 import faiss #Facebook AI Similarity Search
+from langchain_community.vectorstores import Chroma
 
-#Configuração da chave de API do Google a partir do arquivo keySecure.py
-key = keySecure.get_google_api_key(self=None)
+load_dotenv() #Puxar a chave do arquivo dotenv
 embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
 
 #embeddings.embed_query("Texto de exemplo para gerar embedding")
@@ -38,7 +38,10 @@ documentos_empresa = [
     )
 ]
 
-pergunta = "como solicitar férias?"
+faiss_db = FAISS.from_documents(documentos_empresa, embeddings)
+
+pergunta = "Quais são as políticas de férias da empresa?"
+resultados = faiss_db.similarity_search(pergunta, k=2)
 d =768
 index_hnsw = faiss.IndexHNSWFlat(d, 32) #32 é o número de conexões por nó
 faiss_db = FAISS.from_documents(documentos_empresa, embeddings)
@@ -47,3 +50,24 @@ print(f"\n Pergunta: {pergunta}")
 print("\n Documentos mais relevantes (FAISS):")
 for i, doc in enumerate(resultados):
     print(f"\n Documento {i+1}:\n{doc.page_content}\nMetadados: {doc.metadata}")
+
+chroma_db = Chroma.from_documents(
+    documents = documentos_empresa,
+    embedding = embeddings
+)
+
+resultados = chroma_db.similarity_search(pergunta, k=2)
+for doc in resultados:
+    print(f"\n {doc.page_content}")
+
+pergunta_rh = "Quais as regras da empresa?"
+
+resultados_filtrados = chroma_db.similarity_search(
+    pergunta_rh,
+    k=2,
+    filter={"$and": [{"departamento": "RH"}, {"tipo": "política"}]}
+)
+
+for doc in resultados_filtrados:
+    print(f"\n {doc.page_content}")
+    print(f"Metadados: {doc.metadata}")
