@@ -11,6 +11,7 @@ embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
 
 #embeddings.embed_query("Texto de exemplo para gerar embedding")
 
+
 Document(
     page_content="Texto que descreve o conteúdo informativo",
     metadata={
@@ -71,3 +72,5 @@ resultados_filtrados = chroma_db.similarity_search(
 for doc in resultados_filtrados:
     print(f"\n {doc.page_content}")
     print(f"Metadados: {doc.metadata}")
+
+#Pinecone para serviços em nuvem
