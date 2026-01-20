@@ -10,6 +10,8 @@
 - ETL: Extract, Transform, Load
 - CRC: Utilização de histórico de conversas para contextualizar, mantendo um fluxo de conversa
 - Guardrails de segurança: mecanismos para gerar limites definidos, evitando respostas indesejadas
+- Busca semântica captura o significado e contexto, mesmo com palavras diferentes, enquanto a lexical encontra correspondências exatas de termos específicos
+- Busca híbrida mistura a semântica e léxica, tentando encaixar a melhor abordagem para superar as limitações
 
 # Tipos de índices
 - Flat: compara com todos os vetores, garantindo precisão perfeita, porém sendo muito lento
